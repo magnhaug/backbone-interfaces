@@ -4,10 +4,10 @@
 	<script type="text/javascript" src="backbone-interfaces.js"></script>
 	<script type="text/javascript">
 
-		var Shape = new Backbone.Interface({
+		var Shape = Backbone.Interface.extend({
 			area: function() { },
 		});
-		var HyperShape = new Backbone.Interface({
+		var HyperShape = Backbone.Interface.extend({
 			areaSquared: function() { }
 		});
 
@@ -23,8 +23,7 @@
 			}
 		});
 
-		Rectangle.implements(Shape);
-		Rectangle.implements(HyperShape);
+		Rectangle.implements(Shape, HyperShape);
 
         var Square = Rectangle.extend({
             initialize: function(options){
@@ -38,8 +37,8 @@
             }
         });
 
-        var r = new Rectangle({x: 2, y: 4});
-		console.log(r.area(), r.areaSquared());
+        //var r = new Rectangle({x: 2, y: 4});
+		//console.log(r.area(), r.areaSquared());
 
         var s = new Square({x: 3});
 		console.log(s.area(), s.areaSquared());
