@@ -1,0 +1,36 @@
+<html>
+	<script type="text/javascript" src="underscore.js"></script>
+	<script type="text/javascript" src="backbone.js"></script>
+	<script type="text/javascript" src="backbone-interfaces.js"></script>
+	<script type="text/javascript">
+
+		var Shape = new Backbone.Interface({
+			area: function() { },
+		});
+		var HyperShape = new Backbone.Interface({
+			areaSquared: function() { }
+		});
+
+		var Rectangle = Backbone.Model.extend({
+			initialize : function(options){
+				Backbone.Model.prototype.initialize.apply(this, arguments);
+				options = options || {};
+				this.x = options.x;
+				this.y = options.y;
+			},
+			area: function() {
+				return this.x*this.y;
+			},
+			areaSquared: function() {
+				var area = this.area();
+				return area*area;
+			}
+		});
+		Rectangle.implements(Shape);
+		Rectangle.implements(HyperShape);
+		
+		var r = new Rectangle({x: 2, y: 4});
+		console.log(r.area(), r.areaSquared());
+	</script>
+	<body></body>
+</html>
