@@ -15,7 +15,7 @@
 			var base = this;
 			_.each(interfaces, 		function(interface){
 				_.each(_.functions(interface), 	function(fname){
-					if ( ! _.isFunction(base.__proto__[fname])){
+					if ( ! _.isFunction(base[fname])){
 						throw "Did not correctly implement '" + fname + "()' from an implemented interface!";
 					}
 				});

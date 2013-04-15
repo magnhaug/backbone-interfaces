@@ -20,17 +20,29 @@
 			},
 			area: function() {
 				return this.x*this.y;
-			},
-			areaSquared: function() {
-				var area = this.area();
-				return area*area;
 			}
 		});
+
 		Rectangle.implements(Shape);
 		Rectangle.implements(HyperShape);
-		
-		var r = new Rectangle({x: 2, y: 4});
+
+        var Square = Rectangle.extend({
+            initialize: function(options){
+                Rectangle.prototype.initialize.apply(this, arguments);
+                options = options || {};
+                this.x = this.y = options.x;
+            },
+            areaSquared: function() {
+                var area = this.area();
+                return area*area;
+            }
+        });
+
+        var r = new Rectangle({x: 2, y: 4});
 		console.log(r.area(), r.areaSquared());
+
+        var s = new Square({x: 3});
+		console.log(s.area(), s.areaSquared());
 	</script>
 	<body></body>
 </html>
