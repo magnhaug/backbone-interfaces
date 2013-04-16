@@ -10,6 +10,11 @@
         return _.extend.apply(this.__proto__, arguments);
     };
 
+    // Custom exception for better exception handling
+    Backbone.Interface.InterfaceNotImplementedException = function(fname){
+        this.missingFunction = fname;
+    };
+
     // When calling .implements() add the interfaces to a list of initialize-time checks to be done.
     Backbone.Model.implements = Backbone.Collection.implements = Backbone.Router.implements = Backbone.View.implements = function() {
         Array.prototype.push.apply(this._interfaces = this._interfaces || [], arguments);
@@ -23,7 +28,7 @@
         _.each(interfaces, function(interface){
             _.each(_.functions(interface), function(fname){
                 if ( ! _.isFunction(clazz[fname])){
-                    throw "Did not correctly implement '" + fname + "()' from an implemented interface!";
+                    throw new Backbone.Interface.InterfaceNotImplementedException(fname);
                 }
             });
         });
