@@ -12,22 +12,30 @@ describe("Backbone interfaces", function() {
         try{
             new Class();
         } catch (e){
+            // Expect exception
             return true;
         }
         this.fail();
     };
-    
-    var f = function(){};
+
+    it("should handle all class types", function() {
+        var MyInterface     = Backbone.Interface.extend({f: function(){}});
+
+        Backbone.View.extend({}).implements(MyInterface);
+        Backbone.Model.extend({}).implements(MyInterface);
+        Backbone.Router.extend({}).implements(MyInterface);
+        Backbone.Collection.extend({}).implements(MyInterface);
+    });
 
     it("should fail to instantiate class if interface is not implemented", function() {
-        var MyInterface     = Backbone.Interface.extend({f: f});
+        var MyInterface     = Backbone.Interface.extend({f: function(){}});
         var Class           = Backbone.Model.extend({});
 
         Class.implements(MyInterface);
         assumeNotOk(Class);
     });
 
-    it("should succeed if interface is implemented correctly with Backbone.Interface.extend({})", function() {
+    it("should succeed if interface is implemented correctly with `Backbone.Interface.extend({})`", function() {
         var MyInterface     = Backbone.Interface.extend({f: function(){}});
         var Class           = Backbone.Model.extend({f: function(){}});
 
@@ -35,7 +43,7 @@ describe("Backbone interfaces", function() {
         assumeOk(Class);
     });
 
-    it("should succeed if interface is implemented correctly with new Backbone.Interface({})", function() {
+    it("should succeed if interface is implemented correctly with `new Backbone.Interface({})`", function() {
         var MyInterface     = new Backbone.Interface({f: function(){}});
         var Class           = Backbone.Model.extend({f: function(){}});
 
