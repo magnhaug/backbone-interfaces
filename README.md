@@ -21,9 +21,12 @@ new BadClass();  // Throws InterfaceNotImplementedException
 
 Runtime manual interface implementation verification:
 ```javascript
-var MyInterface             = Backbone.Interface.extend({f: function(){}});
-var Class                   = Backbone.Model.extend({f: function(){}});
-var Instance                = new Class();
+var MyInterface     = Backbone.Interface.extend({f: function(){}});
+var GoodClass       = Backbone.Model.extend({f: function(){console.log("foo");} });
+var GoodInstance    = new GoodClass();
+var BadClass        = Backbone.Model.extend({});
+var BadInstance     = new BadClass();
 
-Backbone.Interface.verify(MyInterface, Instance);
+Backbone.Interface.verify(MyInterface, GoodInstance); // Ok
+Backbone.Interface.verify(MyInterface, BadInstance);  // Throws InterfaceNotImplementedException
 ```
