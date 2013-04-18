@@ -33,7 +33,7 @@ Backbone.Interface.verify(MyInterface, BadInstance);  // Throws InterfaceNotImpl
 
 Why?
 ---
-The idea of implementing this came to me after writing yet another method that requires certain features to be implemented in the parameter objects.
+The idea of implementing this came to me after writing yet another method with specific requirements for the parameter objects.
 Interfaces as a concept is traditionally used as a cheap emulation of multiple inheritance.
 In a dynamic and prototypical language like JavaScript this is not needed.
 Though what this *will* give your project, is a cheap emulation of static typing, for certain purposes.
