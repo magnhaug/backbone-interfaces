@@ -80,7 +80,7 @@ describe("Backbone interfaces", function() {
     it("should succeed if implementing several interfaces correctly", function() {
         var MyInterface     = Backbone.Interface.extend({f: function(){}});
         var MyInterface2    = Backbone.Interface.extend({g: function(){}});
-        var Class           = Backbone.Model.extend({ f: function () { }, g: function(){}});
+        var Class           = Backbone.Model.extend({f: function () { }, g: function(){}});
 
         Class.implements(MyInterface, MyInterface2);
         assertInterfaceImplemententationSuccess(Class);
@@ -89,7 +89,7 @@ describe("Backbone interfaces", function() {
     it("should fail to instantiate class if not implementing one of several interfaces correctly", function() {
         var MyInterface     = Backbone.Interface.extend({f: function(){}});
         var MyInterface2    = Backbone.Interface.extend({g: function(){}});
-        var Class           = Backbone.Model.extend({ g: function(){}});
+        var Class           = Backbone.Model.extend({g: function(){}});
 
         Class.implements(MyInterface, MyInterface2);
         assertInterfaceImplementationFailed(Class);
@@ -98,7 +98,7 @@ describe("Backbone interfaces", function() {
     it("should not poison the base Interface prototype", function() {
         var MyInterface     = Backbone.Interface.extend({f: function(){}});
         var MyInterface2    = Backbone.Interface.extend({g: function(){}});
-        var Class           = Backbone.Model.extend({ g: function(){}});
+        var Class           = Backbone.Model.extend({g: function(){}});
 
         Class.implements(MyInterface2);
         assertInterfaceImplemententationSuccess(Class);
@@ -108,9 +108,32 @@ describe("Backbone interfaces", function() {
         var MyInterface             = Backbone.Interface.extend({f: function(){}});
         var MyInterface2            = Backbone.Interface.extend({g: function(){}});
         var MyCompositeInterface    = Backbone.Interface.extend(MyInterface, MyInterface2);
-        var Class                   = Backbone.Model.extend({ g: function(){}});
+        var Class                   = Backbone.Model.extend({g: function(){}});
 
         Class.implements(MyCompositeInterface);
         assertInterfaceImplementationFailed(Class);
+    });
+
+    it("should handle runtime verifications successfully", function() {
+        var MyInterface             = Backbone.Interface.extend({f: function(){}});
+        var Class                   = Backbone.Model.extend({f: function(){}});
+        var Instance                = new Class();
+
+        Backbone.Interface.verify(MyInterface, Instance);
+    });
+
+    it("should handle runtime verifications that fails", function() {
+        var MyInterface             = Backbone.Interface.extend({f: function(){}});
+        var Class                   = Backbone.Model.extend({});
+        var Instance                = new Class();
+
+        try{
+            Backbone.Interface.verify(Instance, MyInterface);
+        } catch (e){
+            if (e instanceof Backbone.Interface.InterfaceNotImplementedException){
+                return;
+            }
+        }
+        this.fail();
     });
 });

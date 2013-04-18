@@ -10,6 +10,14 @@
         return _.extend.apply(this.__proto__, arguments);
     };
 
+    Backbone.Interface.verify = function(interface, clazz){
+        _.each(_.functions(interface), function(fname){
+            if ( ! _.isFunction(clazz[fname])){
+                throw new Backbone.Interface.InterfaceNotImplementedException(fname);
+            }
+        });
+    };
+
     // Custom exception for better exception handling
     Backbone.Interface.InterfaceNotImplementedException = function(fname){
         this.missingFunction = fname;
@@ -26,15 +34,7 @@
         var clazz = this,
             interfaces = clazz.__proto__.constructor._interfaces;
         _.each(interfaces, function(interface){
-            verifyInterface(interface, clazz);
-        });
-    }
-
-    function verifyInterface(interface, clazz){
-        _.each(_.functions(interface), function(fname){
-            if ( ! _.isFunction(clazz[fname])){
-                throw new Backbone.Interface.InterfaceNotImplementedException(fname);
-            }
+            Backbone.Interface.verify(interface, clazz);
         });
     }
 
