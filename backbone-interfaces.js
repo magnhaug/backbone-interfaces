@@ -22,24 +22,25 @@
     };
 
     // Check for implementations of all functions in all implemented interfaces.
-    var verify = function(){
+    function verify(){
         var clazz = this,
             interfaces = clazz.__proto__.constructor._interfaces;
         _.each(interfaces, function(interface){
-            _.each(_.functions(interface), function(fname){
-                if ( ! _.isFunction(clazz[fname])){
-                    throw new Backbone.Interface.InterfaceNotImplementedException(fname);
-                }
-            });
+            verifyInterface(interface, clazz);
         });
-    };
+    }
+
+    function verifyInterface(interface, clazz){
+        _.each(_.functions(interface), function(fname){
+            if ( ! _.isFunction(clazz[fname])){
+                throw new Backbone.Interface.InterfaceNotImplementedException(fname);
+            }
+        });
+    }
 
     // When instantiating an object, perform implementation checks.
-    var initialize = function(){
-        verify.apply(this, arguments);
-    };
-    Backbone.Model      = Backbone.Model.extend({ initialize: initialize });
-    Backbone.Collection = Backbone.Collection.extend({ initialize: initialize });
-    Backbone.Router     = Backbone.Router.extend({ initialize: initialize });
-    Backbone.View       = Backbone.View.extend({ initialize: initialize });
+    Backbone.Model      = Backbone.Model.extend({ initialize: verify });
+    Backbone.Collection = Backbone.Collection.extend({ initialize: verify });
+    Backbone.Router     = Backbone.Router.extend({ initialize: verify });
+    Backbone.View       = Backbone.View.extend({ initialize: verify });
 })(Backbone);
